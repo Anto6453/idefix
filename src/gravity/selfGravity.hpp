@@ -52,9 +52,10 @@ class SelfGravity {
   // Whether we should skip self-gravity computation every n steps
   int skipSelfGravity{1};
 
+  IdefixArray3D<real> potential;  // Gravitational potential
+
  private:
   DataBlock *data;  // My parent data object
-  IdefixArray3D<real> potential;  // Gravitational potential
   IdefixArray3D<real> density;  // Density
   real dt;  // CFL timestep
 
