@@ -25,6 +25,7 @@ DataBlockHost::DataBlockHost(DataBlock& datain) {
     xl[dir] = Kokkos::create_mirror_view(data->xl[dir]);
     dx[dir] = Kokkos::create_mirror_view(data->dx[dir]);
     A[dir] = Kokkos::create_mirror_view(data->A[dir]);
+    loffset[dir] = Kokkos::create_mirror_view(data->gravity->selfGravity.laplacian->loffset[dir]);
   }
 
   np_tot = data->np_tot;
@@ -47,6 +48,7 @@ DataBlockHost::DataBlockHost(DataBlock& datain) {
   Vc = Kokkos::create_mirror_view(data->hydro->Vc);
   Uc = Kokkos::create_mirror_view(data->hydro->Uc);
   InvDt = Kokkos::create_mirror_view(data->hydro->InvDt);
+  selfPotential = Kokkos::create_mirror_view(data->gravity->selfGravity.potential);
 
 #if MHD == YES
   Vs = Kokkos::create_mirror_view(data->hydro->Vs);
@@ -87,6 +89,7 @@ DataBlockHost::DataBlockHost(DataBlock& datain) {
     Kokkos::deep_copy(xl[dir],data->xl[dir]);
     Kokkos::deep_copy(dx[dir],data->dx[dir]);
     Kokkos::deep_copy(A[dir],data->A[dir]);
+    Kokkos::deep_copy(loffset[dir],data->gravity->selfGravity.laplacian->loffset[dir]);
   }
 
   Kokkos::deep_copy(dV,data->dV);
@@ -103,6 +106,7 @@ void DataBlockHost::SyncToDevice() {
 
   Kokkos::deep_copy(data->hydro->Vc,Vc);
   Kokkos::deep_copy(data->hydro->InvDt,InvDt);
+  Kokkos::deep_copy(data->gravity->selfGravity.potential,selfPotential);
 
 #if MHD == YES
   Kokkos::deep_copy(data->hydro->Vs,Vs);
@@ -139,6 +143,7 @@ void DataBlockHost::SyncFromDevice() {
   idfx::pushRegion("DataBlockHost::SyncFromDevice()");
   Kokkos::deep_copy(Vc,data->hydro->Vc);
   Kokkos::deep_copy(InvDt,data->hydro->InvDt);
+  Kokkos::deep_copy(selfPotential,data->gravity->selfGravity.potential);
 
 #if MHD == YES
   Kokkos::deep_copy(Vs,data->hydro->Vs);
