@@ -25,12 +25,12 @@ DataBlockHost::DataBlockHost(DataBlock& datain) {
     xl[dir] = Kokkos::create_mirror_view(data->xl[dir]);
     dx[dir] = Kokkos::create_mirror_view(data->dx[dir]);
     A[dir] = Kokkos::create_mirror_view(data->A[dir]);
-    loffset[dir] = Kokkos::create_mirror_view(data->gravity->selfGravity.laplacian->loffset[dir]);
   }
 
   np_tot = data->np_tot;
   np_int = data->np_int;
   np_tot = data->np_tot;
+  loffset = data->gravity->selfGravity.laplacian->loffset[dir];
 
   nghost = data->nghost;
 
@@ -89,7 +89,6 @@ DataBlockHost::DataBlockHost(DataBlock& datain) {
     Kokkos::deep_copy(xl[dir],data->xl[dir]);
     Kokkos::deep_copy(dx[dir],data->dx[dir]);
     Kokkos::deep_copy(A[dir],data->A[dir]);
-    Kokkos::deep_copy(loffset[dir],data->gravity->selfGravity.laplacian->loffset[dir]);
   }
 
   Kokkos::deep_copy(dV,data->dV);
