@@ -30,7 +30,7 @@ DataBlockHost::DataBlockHost(DataBlock& datain) {
   np_tot = data->np_tot;
   np_int = data->np_int;
   np_tot = data->np_tot;
-  loffset = data->gravity->selfGravity.laplacian->loffset[dir];
+  loffset = data->gravity->selfGravity.laplacian->loffset;
 
   nghost = data->nghost;
 
