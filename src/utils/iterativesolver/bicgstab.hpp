@@ -90,6 +90,7 @@ int Bicgstab<T>::Solve(IdefixArray3D<real> &guess, IdefixArray3D<real> &rhs) {
       this->rho = 1.0;
       this->alpha = 1.0;
       this->omega = 1.0;
+      idfx::cout << "Bicgstab:: Step reached before restart : " << n << std::endl;
       n = -1;
       idfx::popRegion();
       return(n);
@@ -165,6 +166,9 @@ void Bicgstab<T>::PerformIter() {
     idfx::popRegion();
     return;
     // IDEFIX_ERROR("rho is nan in step 1");
+  }
+  if(rho == 0.0) {
+    idfx::cout << "Bicgstab:: rho is equal to 0.0 in step 1." << std::endl;
   }
 
   // ***** Step 2.
